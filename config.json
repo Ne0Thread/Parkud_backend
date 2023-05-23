@@ -1,0 +1,7 @@
+{
+  "host": "localhost",
+  "port" : 5434,
+  "database" : "parkud_dbpg",
+  "user" : "parkud_db_admin",
+  "password": "20182020065"
+}
