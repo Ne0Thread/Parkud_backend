@@ -30,6 +30,43 @@ def test():
     json = {}
     json["message"]="Server running ..."
     return jsonify(json)
+"""
+---------------------------
+    ENDPOINTS USUARIOS
+--------------------------
+"""
+@app.route("/cliente/<string:cliente_id>",methods=['GET'])
+def get_clienteByid(cliente_id):
+    try:
+        # Obtener los parámetros del cuerpo de la solicitud
+        # parametros = request.json.get('parametros')
+
+        # Conectarse a la base de datos PostgreSQL
+        DBconn = conectarBD()
+
+        # Crear un cursor
+        cursor = DBconn.cursor()
+
+        # Ejecutar el procedimiento almacenado
+        # cursor.callproc('nombre_procedimiento', parametros)
+        print("SELECT * FROM PARQUEADERO.CLIENTE")
+        cursor.execute("SELECT * FROM PARQUEADERO.CLIENTE WHERE K_CLIENTE = "+str(cliente_id))
+
+        # Recuperar los resultados, si los hay
+        results = cursor.fetchall()
+
+        # Cerrar el cursor y la conexión
+        cursor.close()
+        cerrarBD(DBconn)
+
+        # Devolver los resultados como respuesta en formato JSON
+        return jsonify(results)
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+   #todo El de agregar cliente se hace con un callproc de la BD que no esta aun definida.
 
 """
 ---------------------------
@@ -70,12 +107,6 @@ def get_parqueaderos():
     return jsonify(response)
 
 
-@app.route("/cliente/parqueadero/<string:parqueadero_id>", methods=['GET'])
-def get_parqueadero(parqueadero_id):
-    response = ctrSucursal.show(parqueadero_id)
-    return jsonify(response)
-
-
 """
 ---------------------------
     ENDPOINTS ClIENTE VEHICULO
@@ -85,8 +116,34 @@ def get_parqueadero(parqueadero_id):
 
 @app.route("/cliente/vehiculos/marcas>", methods=["GET"])
 def get_marcas():
-    response = ctrMarcaVehiculo.index()
-    return jsonify(response)
+    try:
+        # Obtener los parámetros del cuerpo de la solicitud
+        # parametros = request.json.get('parametros')
+
+        # Conectarse a la base de datos PostgreSQL
+        DBconn = conectarBD()
+
+        # Crear un cursor
+        cursor = DBconn.cursor()
+
+        # Ejecutar el procedimiento almacenado
+        # cursor.callproc('nombre_procedimiento', parametros)
+        print("SELECT * FROM PARQUEADERO.MARCA_VEHICULO")
+        cursor.execute("SELECT * FROM PARQUEADERO.MARCA_VEHICULO")
+
+        # Recuperar los resultados, si los hay
+        results = cursor.fetchall()
+
+        # Cerrar el cursor y la conexión
+        cursor.close()
+        cerrarBD(DBconn)
+
+        # Devolver los resultados como respuesta en formato JSON
+        return jsonify(results)
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 
 """
 @app.route("/cliente/<string:cliente_id>/vehiculo/", methods=['POST'])
