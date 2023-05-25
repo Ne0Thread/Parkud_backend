@@ -30,6 +30,7 @@ def test():
     json = {}
     json["message"]="Server running ..."
     return jsonify(json)
+
 """
 ---------------------------
     ENDPOINTS USUARIOS
@@ -144,7 +145,143 @@ def add_cliente():
         return jsonify({'error': str(e)}), 500
 
 
+@app.route("/verificarDispo",methods=['GET'])
+def get_disponibilidad():
+    try:
+        # Obtener los parámetros del cuerpo de la solicitud
+        info_result = request.get_json()
 
+        # parametros = request.json.get('parametros')
+
+        # Conectarse a la base de datos PostgreSQL
+        DBconn = conectarBD()
+
+        # Crear un cursor
+        cursor = DBconn.cursor()
+        #Parametros del procedimiento o funcion
+        par = (info_result["nombre_ciudad_p"],info_result["tipo_vehiculo_p"],info_result["es_cubierto_p"],info_result["fecha_entrada_p"],info_result["hora_entrada_p"],info_result["s_apell"],info_result["tel"],info_result["nombre_entrada_p"],info_result["nombre_sucursal_p"])
+
+        # Ejecutar el procedimiento almacenado
+        cursor.callproc('PARQUEADERO.VERIFICAR_DISPONIBILIDAD_FU', par)
+
+
+        # Recuperar los resultados, si los hay
+        results = cursor.fetchall()
+
+        # Cerrar el cursor y la conexión
+        cursor.close()
+        cerrarBD(DBconn)
+
+        # Devolver los resultados como respuesta en formato JSON
+        return jsonify(results)
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route("/cliente/vehiculo",methods=['POST'])
+def set_vehiculo():
+    try:
+        # Obtener los parámetros del cuerpo de la solicitud
+        info_result = request.get_json()
+
+        # parametros = request.json.get('parametros')
+
+        # Conectarse a la base de datos PostgreSQL
+        DBconn = conectarBD()
+
+        # Crear un cursor
+        cursor = DBconn.cursor()
+        #Parametros del procedimiento o funcion
+        par = (info_result["tipo_vehiculo_p"],info_result["placa_p"],info_result["nombre_1_p"],info_result["nombre_2_p"],info_result["apellido_1_p"],info_result["apellido_2_p"],info_result["marca_vehiculo_p"],info_result["color_vehiculo_p"])
+
+
+        # Ejecutar el procedimiento almacenado
+        cursor.callproc('PARQUEADERO.VERIFICAR_DISPONIBILIDAD_FU', par)
+
+
+        # Recuperar los resultados, si los hay
+        results = cursor.fetchall()
+
+        # Cerrar el cursor y la conexión
+        cursor.close()
+        cerrarBD(DBconn)
+
+        # Devolver los resultados como respuesta en formato JSON
+        return jsonify(results)
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route("/supAdmin/admin",methods=['POST'])
+def set_vehiculo():
+    try:
+        # Obtener los parámetros del cuerpo de la solicitud
+        info_result = request.get_json()
+
+        # parametros = request.json.get('parametros')
+
+        # Conectarse a la base de datos PostgreSQL
+        DBconn = conectarBD()
+
+        # Crear un cursor
+        cursor = DBconn.cursor()
+        #Parametros del procedimiento o funcion
+        par = (info_result["tipo_identificacion_p"],info_result["numero_identificacion_p"],info_result["NOMBRE1_EMPLEADO_P"],info_result["NOMBRE2_EMPLEADO_P"],info_result["APELLIDO1_EMPLEADO_P"],info_result["APELLIDO2_CLIENTE_P"],info_result["TELEFONO_EMPLEADO_P"],info_result["CORREO_EMPLEADO_P"])
+
+
+        # Ejecutar el procedimiento almacenado
+        cursor.callproc('PARQUEADERO.CREAR_ADMIN_FU', par)
+
+
+        # Recuperar los resultados, si los hay
+        results = cursor.fetchall()
+
+        # Cerrar el cursor y la conexión
+        cursor.close()
+        cerrarBD(DBconn)
+
+        # Devolver los resultados como respuesta en formato JSON
+        return jsonify(results)
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route("/supAdmin/operador",methods=['POST'])
+def set_vehiculo():
+    try:
+        # Obtener los parámetros del cuerpo de la solicitud
+        info_result = request.get_json()
+
+        # parametros = request.json.get('parametros')
+
+        # Conectarse a la base de datos PostgreSQL
+        DBconn = conectarBD()
+
+        # Crear un cursor
+        cursor = DBconn.cursor()
+        #Parametros del procedimiento o funcion
+        par = (info_result["tipo_identificacion_p"],info_result["numero_identificacion_p"],info_result["NOMBRE1_EMPLEADO_P"],info_result["NOMBRE2_EMPLEADO_P"],info_result["APELLIDO1_EMPLEADO_P"],info_result["APELLIDO2_CLIENTE_P"],info_result["TELEFONO_EMPLEADO_P"],info_result["CORREO_EMPLEADO_P"])
+
+
+        # Ejecutar el procedimiento almacenado
+        cursor.callproc('PARQUEADERO.CREAR_OPERADOR_FU', par)
+
+
+        # Recuperar los resultados, si los hay
+        results = cursor.fetchall()
+
+        # Cerrar el cursor y la conexión
+        cursor.close()
+        cerrarBD(DBconn)
+
+        # Devolver los resultados como respuesta en formato JSON
+        return jsonify(results)
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 """
 ---------------------------
     ENDPOINTS PARQUEADEROS
@@ -184,13 +321,6 @@ def get_parqueaderos():
     return jsonify(response)
 
 
-"""
----------------------------
-    ENDPOINTS ClIENTE VEHICULO
---------------------------
-"""
-
-
 @app.route("/cliente/vehiculos/marcas", methods=["GET"])
 def get_marcas():
     try:
@@ -221,74 +351,6 @@ def get_marcas():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-
-"""
-@app.route("/cliente/<string:cliente_id>/vehiculo/", methods=['POST'])
-def get_result(cliente_id):
-    info_result = request.get_json()
-    response = ctrVehiculo.create(info_result, cliente_id)
-    return jsonify(response)
-
-"""
-"""
----------------------------
-    ENDPOINTS RESERVAS
---------------------------
-"""
-"""
-
-
-@app.route("/cliente/<string:cliente_id>/vehiculo/<string:tipo_vehiculo>", methods=['GET'])
-def get_vehiculo_clasificado(cliente_id, tipo_vehiculo):
-    response = ctrVehiculo.index(cliente_id, tipo_vehiculo)
-    return jsonify(response)
-
-
-@app.route("/cliente/sucursal/vehiculo/<string:tipo_vehiculo>", methods=['GET'])
-def get_vehiculo_clasificado(cliente_id, tipo_vehiculo):
-    response = ctrVehiculo.index(cliente_id, tipo_vehiculo)
-    return jsonify(response)
-
-@app.route("/cliente/ciudades", methods=['GET'])
-def get_ciudades():
-    response = ctrCiudad.index()
-    return jsonify(response)
-
-
-@app.route("/cliente/ciudad/<string:ciudad_id>/sucursal/<string:tipo_sucursal>", methods=['GET'])
-def get_by_ciudad_tsucursal(ciudad_id, tipo_sucursal):
-    response = ctrCiudad.index(ciudad_id, tipo_sucursal)
-    return jsonify(response)
-
-
-@app.route("/cliente/sucursal/<string:id_sucursal>", methods=['GET'])
-def get_sucursal(id_sucursal):
-    response = ctrCiudad.index(id_sucursal)
-    return jsonify(response)
-
-
-@app.route("/cliente/<string:cliente_id>/sucursal/<string:sucursal_id>/<string:vehiculo_id>", methods=["POST"])
-def create_reserva(cliente_id, sucursal_id,vehiculo_id):
-    info_result = request.get_json()
-    response = ctrSucursal.create(info_result, cliente_id, sucursal_id, vehiculo_id)
-    return jsonify(response)
-
-
-@app.route("/result/<string:result_id>", methods=['PUT'])
-def update_result(result_id):
-    data = request.get_json()
-    response = result_controller.update(result_id, data)
-    return jsonify(response)
-
-
-@app.route("/result/<string:result_id>", methods=['DELETE'])
-def delete_result(result_id):
-    response = result_controller.delete(result_id)
-    return jsonify(response)
-
-
-
-"""
 
 if __name__=='__main__':
     dataConfig = loadFileConfig()
