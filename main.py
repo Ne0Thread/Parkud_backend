@@ -215,7 +215,7 @@ def set_vehiculo():
 
 
 @app.route("/supAdmin/admin",methods=['POST'])
-def set_vehiculo():
+def set_admin():
     try:
         # Obtener los parámetros del cuerpo de la solicitud
         info_result = request.get_json()
@@ -250,7 +250,7 @@ def set_vehiculo():
 
 
 @app.route("/supAdmin/operador",methods=['POST'])
-def set_vehiculo():
+def set_operador():
     try:
         # Obtener los parámetros del cuerpo de la solicitud
         info_result = request.get_json()
