@@ -103,13 +103,27 @@ def add_cliente():
 
         # Recuperar los resultados, si los hay
         results = cursor.fetchall()
+        if results:
+            # Crear una lista para almacenar los diccionarios de los resultados
+            data = []
+
+            # Iterar sobre los resultados y construir los diccionarios
+            for result in results:
+                # Obtener los elementos internos de cada resultado
+                inner_results = result[0]
+
+                # Extender la lista de diccionarios con los elementos internos
+                data.extend(inner_results)
+
+            # Devolver la lista de diccionarios como respuesta en formato JSON
+            return jsonify(data)
 
         # Cerrar el cursor y la conexión
         cursor.close()
         cerrarBD(DBconn)
 
         # Devolver los resultados como respuesta en formato JSON
-        return jsonify(results)
+        return jsonify(results[0][2])
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -138,13 +152,27 @@ def get_disponibilidad():
 
         # Recuperar los resultados, si los hay
         results = cursor.fetchall()
+        if results:
+            # Crear una lista para almacenar los diccionarios de los resultados
+            data = []
+
+            # Iterar sobre los resultados y construir los diccionarios
+            for result in results:
+                # Obtener los elementos internos de cada resultado
+                inner_results = result[0]
+
+                # Extender la lista de diccionarios con los elementos internos
+                data.extend(inner_results)
+
+            # Devolver la lista de diccionarios como respuesta en formato JSON
+            return jsonify(data)
 
         # Cerrar el cursor y la conexión
         cursor.close()
         cerrarBD(DBconn)
 
         # Devolver los resultados como respuesta en formato JSON
-        return jsonify(results)
+        return jsonify(results[0][2])
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -175,10 +203,27 @@ def set_vehiculo():
 
         # Recuperar los resultados, si los hay
         results = cursor.fetchall()
+        if results:
+            # Crear una lista para almacenar los diccionarios de los resultados
+            data = []
+
+            # Iterar sobre los resultados y construir los diccionarios
+            for result in results:
+                # Obtener los elementos internos de cada resultado
+                inner_results = result[0]
+
+                # Extender la lista de diccionarios con los elementos internos
+                data.extend(inner_results)
+
+            # Devolver la lista de diccionarios como respuesta en formato JSON
+            return jsonify(data)
 
         # Cerrar el cursor y la conexión
         cursor.close()
         cerrarBD(DBconn)
+
+        # Devolver los resultados como respuesta en formato JSON
+        return jsonify(results[0][2])
 
         # Devolver los resultados como respuesta en formato JSON
         return jsonify(results)
@@ -212,13 +257,27 @@ def set_admin():
 
         # Recuperar los resultados, si los hay
         results = cursor.fetchall()
+        if results:
+            # Crear una lista para almacenar los diccionarios de los resultados
+            data = []
+
+            # Iterar sobre los resultados y construir los diccionarios
+            for result in results:
+                # Obtener los elementos internos de cada resultado
+                inner_results = result[0]
+
+                # Extender la lista de diccionarios con los elementos internos
+                data.extend(inner_results)
+
+            # Devolver la lista de diccionarios como respuesta en formato JSON
+            return jsonify(data)
 
         # Cerrar el cursor y la conexión
         cursor.close()
         cerrarBD(DBconn)
 
         # Devolver los resultados como respuesta en formato JSON
-        return jsonify(results)
+        return jsonify(results[0][2])
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -249,13 +308,27 @@ def set_operador():
 
         # Recuperar los resultados, si los hay
         results = cursor.fetchall()
+        if results:
+            # Crear una lista para almacenar los diccionarios de los resultados
+            data = []
+
+            # Iterar sobre los resultados y construir los diccionarios
+            for result in results:
+                # Obtener los elementos internos de cada resultado
+                inner_results = result[0]
+
+                # Extender la lista de diccionarios con los elementos internos
+                data.extend(inner_results)
+
+            # Devolver la lista de diccionarios como respuesta en formato JSON
+            return jsonify(data)
 
         # Cerrar el cursor y la conexión
         cursor.close()
         cerrarBD(DBconn)
 
         # Devolver los resultados como respuesta en formato JSON
-        return jsonify(results)
+        return jsonify(results[0][2])
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
