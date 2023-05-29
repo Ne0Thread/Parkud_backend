@@ -1,18 +1,15 @@
-import psycopg2
-from flask import Flask
-from flask import jsonify
-from flask import request
-import json
-
-from flask_cors import CORS
-
-from functions_db import loadFileConfig
-from routes.users import routes_user
+from routes.parking import routes_parking
+from routes.token import routes_token
+from routes.users import *
 
 app = Flask(__name__)
 cors = CORS(app)
 
-app.register_blueprint(routes_user, url_prefix="/api")
+app.register_blueprint(routes_user)
+app.register_blueprint(routes_user_auth)
+app.register_blueprint(routes_SUser)
+app.register_blueprint(routes_token)
+app.register_blueprint(routes_parking)
 
 
 @app.route("/", methods=['GET'])

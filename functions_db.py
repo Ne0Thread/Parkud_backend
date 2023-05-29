@@ -1,6 +1,8 @@
 import psycopg2
-from flask import Flask, json
+from flask import Flask, json, Request
 from flask_cors import CORS
+
+from function_jwt import get_data
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -12,10 +14,12 @@ def loadFileConfig():
     return data
 
 
-def conectarBD():
+def conectarBD(request: Request):
+    token = request.headers['Authorization'].split(" ")[1]
+    data = get_data(token)
     dataConn = loadFileConfig()
     conn = psycopg2.connect(host=dataConn["host"], port=dataConn["port"], database=dataConn["database"],
-                            user=dataConn["user"], password=dataConn["password"])
+                            user=data["user"], password=data["password"])
     return conn
 
 
