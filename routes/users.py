@@ -1,8 +1,19 @@
 from flask import Blueprint, request, jsonify
 
+from function_jwt import write_token, validate_token, get_data
 from functions_db import *
 
-routes_user = Blueprint("routes_auth", __name__)
+routes_user = Blueprint("routes_user", __name__)
+routes_user_auth = Blueprint("routes_user_auth", __name__)
+routes_SUser = Blueprint("routes_SUser", __name__)
+
+
+# verificar si el jwt esta activo
+@routes_user.before_request
+@routes_SUser.before_request
+def verify_token_middleware():
+    token = request.headers['Authorization'].split(" ")[1]
+    response = validate_token(token)
 
 
 @routes_user.route("/cliente/<string:cliente_id>", methods=['GET'])
@@ -12,7 +23,7 @@ def get_clienteByid(cliente_id):
         # parametros = request.json.get('parametros')
 
         # Conectarse a la base de datos PostgreSQL
-        DBconn = conectarBD()
+        DBconn = conectarBD(request)
 
         # Crear un cursor
         cursor = DBconn.cursor()
@@ -48,7 +59,7 @@ def post_newClaveCliente(emailCliente):
         # parametros = request.json.get('parametros')
 
         # Conectarse a la base de datos PostgreSQL
-        DBconn = conectarBD()
+        DBconn = conectarBD(request)
 
         # Crear un cursor
         cursor = DBconn.cursor()
@@ -72,7 +83,7 @@ def post_newClaveCliente(emailCliente):
         return jsonify({'error': str(e)}), 500
 
 
-@routes_user.route("/cliente", methods=['POST'])
+@routes_user_auth.route("/cliente", methods=['POST'])
 def add_cliente():
     try:
         # Obtener los parámetros del cuerpo de la solicitud
@@ -91,7 +102,7 @@ def add_cliente():
         # parametros = request.json.get('parametros')
 
         # Conectarse a la base de datos PostgreSQL
-        DBconn = conectarBD()
+        DBconn = conectarBD(request)
 
         # Crear un cursor
         cursor = DBconn.cursor()
@@ -138,7 +149,7 @@ def get_disponibilidad():
         # parametros = request.json.get('parametros')
 
         # Conectarse a la base de datos PostgreSQL
-        DBconn = conectarBD()
+        DBconn = conectarBD(request)
 
         # Crear un cursor
         cursor = DBconn.cursor()
@@ -187,7 +198,7 @@ def set_vehiculo():
         # parametros = request.json.get('parametros')
 
         # Conectarse a la base de datos PostgreSQL
-        DBconn = conectarBD()
+        DBconn = conectarBD(request)
 
         # Crear un cursor
         cursor = DBconn.cursor()
@@ -232,7 +243,7 @@ def set_vehiculo():
         return jsonify({'error': str(e)}), 500
 
 
-@routes_user.route("/supAdmin/admin", methods=['POST'])
+@routes_SUser.route("/supAdmin/admin", methods=['POST'])
 def set_admin():
     try:
         # Obtener los parámetros del cuerpo de la solicitud
@@ -241,7 +252,7 @@ def set_admin():
         # parametros = request.json.get('parametros')
 
         # Conectarse a la base de datos PostgreSQL
-        DBconn = conectarBD()
+        DBconn = conectarBD(request)
 
         # Crear un cursor
         cursor = DBconn.cursor()
@@ -283,7 +294,7 @@ def set_admin():
         return jsonify({'error': str(e)}), 500
 
 
-@routes_user.route("/supAdmin/operador", methods=['POST'])
+@routes_SUser.route("/supAdmin/operador", methods=['POST'])
 def set_operador():
     try:
         # Obtener los parámetros del cuerpo de la solicitud
@@ -292,7 +303,7 @@ def set_operador():
         # parametros = request.json.get('parametros')
 
         # Conectarse a la base de datos PostgreSQL
-        DBconn = conectarBD()
+        DBconn = conectarBD(request)
 
         # Crear un cursor
         cursor = DBconn.cursor()

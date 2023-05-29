@@ -1,8 +1,15 @@
 from flask import Blueprint, request, jsonify
 
+from function_jwt import validate_token
 from functions_db import *
 
 routes_parking = Blueprint("routes_parking", __name__)
+
+
+@routes_parking.before_request
+def verify_token_middleware():
+    token = request.headers['Authorization'].split(" ")[1]
+    response = validate_token(token)
 
 
 @routes_parking.route("/cliente/parqueaderos", methods=['GET'])
@@ -12,7 +19,7 @@ def get_parqueaderos():
         # parametros = request.json.get('parametros')
 
         # Conectarse a la base de datos PostgreSQL
-        DBconn = conectarBD()
+        DBconn = conectarBD(request)
 
         # Crear un cursor
         cursor = DBconn.cursor()
@@ -58,7 +65,7 @@ def get_marcas():
         # parametros = request.json.get('parametros')
 
         # Conectarse a la base de datos PostgreSQL
-        DBconn = conectarBD()
+        DBconn = conectarBD(request)
 
         # Crear un cursor
         cursor = DBconn.cursor()
